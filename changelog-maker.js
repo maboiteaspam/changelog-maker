@@ -76,7 +76,7 @@ function organiseCommits (list) {
 
 function commitTags (list, callback) {
   var sublist = list.filter(function (commit) {
-    return typeof commit.ghIssue == 'number' && commit.ghUser && commit.ghProject
+    return typeof commit.ghIssue === 'number' && commit.ghUser && commit.ghProject
   })
 
   if (!sublist.length)
@@ -91,7 +91,7 @@ function commitTags (list, callback) {
     sublist.forEach(function (commit) {
       function onFetch (err, issue) {
         if (err) {
-          console.error('Error fetching issue #%s: %s', commit.ghIssue, err.message );
+          console.error('Error fetching issue #%s: %s', commit.ghIssue, err.message )
           return done()
         }
 
@@ -100,7 +100,7 @@ function commitTags (list, callback) {
         done()
       }
 
-      if (commit.ghUser == 'iojs')
+      if (commit.ghUser === 'iojs')
         commit.ghUser = 'nodejs' // forcably rewrite as the GH API doesn't do it for us
 
       ghissues.get(authData, commit.ghUser, commit.ghProject, commit.ghIssue, onFetch)
@@ -133,7 +133,7 @@ function toStringSimple (data) {
 
   return data.semver.length
       ? chalk.green(chalk.bold(s))
-      : data.group == 'doc'
+      : data.group === 'doc'
         ? chalk.grey(s)
 	: s
 }
@@ -152,7 +152,7 @@ function toStringMarkdown (data) {
 
   return data.semver.length
       ? chalk.green(chalk.bold(s))
-      : data.group == 'doc'
+      : data.group === 'doc'
         ? chalk.grey(s)
 	: s
 }
@@ -161,17 +161,17 @@ function toStringMarkdown (data) {
 function commitToOutput (commit) {
   var data        = {}
     , prUrlMatch  = commit.prUrl && commit.prUrl.match(/^https?:\/\/.+\/([^\/]+\/[^\/]+)\/\w+\/\d+$/i)
-    , urlHash     = '#'+commit.ghIssue || commit.prUrl
+    , urlHash     = '#' + commit.ghIssue || commit.prUrl
     , ghUrl       = ghId.user + '/' + ghId.name
 
   data.sha     = commit.sha
-  data.shaUrl  = 'https://github.com/' + ghUrl + '/commit/' + commit.sha.substr(0,10)
+  data.shaUrl  = 'https://github.com/' + ghUrl + '/commit/' + commit.sha.substr(0, 10)
   data.semver  = commit.labels && commit.labels.filter(function (l) { return l.indexOf('semver') > -1 }) || false
   data.revert  = revertRe.test(commit.summary)
   data.group   = commitToGroup(commit) || ''
   data.summary = commit.summary && commit.summary.replace(revertRe, '').replace(/"$/, '').replace(groupRe, '')
   data.author  = (commit.author && commit.author.name) || ''
-  data.pr      = prUrlMatch && ((prUrlMatch[1] != ghUrl ? prUrlMatch[1] : '') + urlHash)
+  data.pr      = prUrlMatch && ((prUrlMatch[1] !== ghUrl ? prUrlMatch[1] : '') + urlHash)
   data.prUrl   = prUrlMatch && commit.prUrl
 
   return (argv.simple ? toStringSimple : toStringMarkdown)(data)
