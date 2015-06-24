@@ -72,6 +72,21 @@
     "wrap-iife": [
       0,
       "inside"
+    ],
+    "no-multi-spaces": true,
+    "no-undef": true,
+    "no-cond-assign": false,
+    "no-regex-spaces": false,
+    "consistent-return": false,
+    "no-shadow": false,
+    "key-spacing": false,
+    "no-mixed-requires": false,
+    "strict": false,
+    "no-extra-parens": true,
+    "no-underscore-dangle": false,
+    "semi": [
+      2,
+      "never"
     ]
   }
 }
